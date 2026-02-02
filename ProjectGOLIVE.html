@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Love Letter 💌</title>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
+    />
+
+    <style>
+      :root {
+        --purple: #4b3b5f;
+        --pink: #ff5f9e;
+      }
+
+      * {
+        box-sizing: border-box;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background: linear-gradient(135deg, #f5e6ef, #fdeff5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 16px;
+        overflow: hidden;
+        transition: background 1s ease;
+      }
+
+      body.celebrate {
+        background: linear-gradient(135deg, #ffd6e8, #fff0f6);
+      }
+
+      /* HEARTS */
+      .hearts {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 50;
+      }
+
+      .heart {
+        position: absolute;
+        bottom: -40px;
+        font-size: clamp(18px, 4vw, 28px);
+        animation: floatUp 3.5s ease-out forwards;
+      }
+
+      @keyframes floatUp {
+        from {
+          transform: translateY(0);
+          opacity: 0;
+        }
+        10% {
+          opacity: 1;
+        }
+        to {
+          transform: translateY(-120vh);
+          opacity: 0;
+        }
+      }
+
+      /* CARD */
+      .card {
+        width: 100%;
+        max-width: 420px;
+        background: white;
+        border-radius: 22px;
+        padding: clamp(20px, 5vw, 36px);
+        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15);
+        animation: fadeIn 0.6s ease;
+        z-index: 10;
+
+        /* 🔑 SCROLL FIX */
+        max-height: calc(100vh - 32px);
+        overflow-y: auto;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      .header {
+        text-align: center;
+        font-size: clamp(32px, 8vw, 40px);
+        margin-bottom: 16px;
+      }
+
+      h1 {
+        color: var(--purple);
+        margin-bottom: 12px;
+        font-size: clamp(22px, 6vw, 28px);
+      }
+
+      /* TEXT */
+      p {
+        color: #555;
+        line-height: 1.65;
+        font-size: 16px;
+      }
+
+      /* ABOUT YOU – balanced size */
+      .about-text p {
+        margin-bottom: 12px;
+      }
+
+      /* INPUTS */
+      input {
+        width: 100%;
+        padding: 14px;
+        margin: 10px 0;
+        border-radius: 14px;
+        border: 1px solid #ddd;
+        font-size: 16px;
+      }
+
+      /* BUTTONS */
+      button {
+        width: 100%;
+        padding: 14px;
+        border-radius: 30px;
+        border: none;
+        background: linear-gradient(135deg, var(--purple), var(--pink));
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+        margin-top: 20px;
+      }
+
+      /* OPTIONS */
+      .options {
+        display: grid;
+        gap: 14px;
+      }
+
+      .option {
+        padding: 16px;
+        border-radius: 16px;
+        border: 2px solid #eee;
+        cursor: pointer;
+      }
+
+      .option.active {
+        border-color: var(--pink);
+        background: #fff0f6;
+      }
+
+      /* SLIDER */
+      .track {
+        background: #eee;
+        border-radius: 40px;
+        height: 50px;
+        position: relative;
+        margin-top: 24px;
+        overflow: hidden;
+      }
+
+      .track span {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #888;
+        pointer-events: none;
+      }
+
+      .thumb {
+        position: absolute;
+        height: 50px;
+        width: 50px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--purple), var(--pink));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        cursor: pointer;
+        left: 0;
+        font-size: 20px;
+        touch-action: none;
+      }
+
+      /* HAPTIC BOUNCE */
+      @keyframes snapBounce {
+        0% {
+          transform: scale(1);
+        }
+        40% {
+          transform: scale(0.92);
+        }
+        70% {
+          transform: scale(1.04);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      .thumb.bounce {
+        animation: snapBounce 0.35s ease;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="hearts" id="hearts"></div>
+
+    <!-- LOGIN -->
+    <div class="card" id="login">
+      <div class="header">💌</div>
+      <h1>Sign In</h1>
+      <p>This letter is meant for someone special.</p>
+      <input id="email" placeholder="Email" />
+      <input id="password" type="password" placeholder="Password" />
+      <button onclick="login()">Login</button>
+    </div>
+
+    <!-- HOME -->
+    <div class="card hidden" id="home">
+      <div class="header">💖</div>
+      <h1>About You</h1>
+
+      <div class="about-text">
+        <p>
+          <strong>Samiksha</strong> is effortlessly everyone’s favorite — a
+          young entrepreneur with ambition in her eyes and kindness in her
+          heart.
+        </p>
+        <p>
+          Warm, loving, pet-friendly, and naturally comforting, she brings calm
+          to chaos and light to every room.
+        </p>
+        <p>
+          Most importantly, she’s the kind of partner who feels like home —
+          honest, caring, and rare.
+        </p>
+      </div>
+
+      <button onclick="go('message')">You have a new activity ✨</button>
+    </div>
+
+    <!-- MESSAGE -->
+    <div class="card hidden" id="message">
+      <div class="header">📩</div>
+      <h1>You have a new request</h1>
+      <p>Would you like to go on a Valentine’s date?</p>
+      <button onclick="go('options')">View date options →</button>
+    </div>
+
+    <!-- OPTIONS -->
+    <div class="card hidden" id="options">
+      <div class="header">✨</div>
+      <h1>Choose a date</h1>
+
+      <div class="options">
+        <div class="option" onclick="selectOption('Fancy Breakfast ☕', this)">
+          Fancy Breakfast ☕
+        </div>
+        <div class="option" onclick="selectOption('Bike Ride 🏍️', this)">
+          Bike Ride 🏍️
+        </div>
+        <div class="option" onclick="selectOption('Golfing ⛳', this)">
+          Golfing ⛳
+        </div>
+      </div>
+
+      <p id="summary">Select an option to continue</p>
+      <button onclick="go('confirm')">Continue →</button>
+    </div>
+
+    <!-- CONFIRM -->
+    <div class="card hidden" id="confirm">
+      <div class="header">💫</div>
+      <h1>Confirm the date</h1>
+      <p id="finalSummary"></p>
+
+      <div class="track" id="track">
+        <span>Slide to confirm 💖</span>
+        <div class="thumb" id="thumb">→</div>
+      </div>
+    </div>
+
+    <!-- DONE -->
+    <div class="card hidden" id="done">
+      <div class="header">🥰</div>
+      <h1>It’s a date!</h1>
+      <p>14th February is officially ours 💖</p>
+      <button onclick="logout()">Logout</button>
+    </div>
+
+    <script>
+      let dragging = false;
+      let confirmed = false;
+
+      const thumb = document.getElementById("thumb");
+      const track = document.getElementById("track");
+
+      /* NAV */
+      function go(page) {
+        document
+          .querySelectorAll(".card")
+          .forEach((c) => c.classList.add("hidden"));
+        document.getElementById(page).classList.remove("hidden");
+      }
+
+      /* LOGIN / LOGOUT */
+      function login() {
+        if (email.value.trim() && password.value.trim()) {
+          resetSlider();
+          go("home");
+        }
+      }
+
+      function logout() {
+        resetSlider();
+        document.body.classList.remove("celebrate");
+        go("login");
+      }
+
+      /* OPTIONS */
+      function selectOption(text, el) {
+        document
+          .querySelectorAll(".option")
+          .forEach((o) => o.classList.remove("active"));
+        el.classList.add("active");
+        summary.textContent = `You chose: ${text}`;
+        finalSummary.textContent = `Date plan: ${text}`;
+      }
+
+      /* SLIDER RESET */
+      function resetSlider() {
+        dragging = false;
+        confirmed = false;
+        thumb.style.left = "0px";
+        thumb.textContent = "→";
+      }
+
+      /* START DRAG */
+      thumb.addEventListener("mousedown", startDrag);
+      thumb.addEventListener("touchstart", startDrag);
+
+      function startDrag() {
+        if (confirmed) return;
+        dragging = true;
+        thumb.style.transition = "none";
+      }
+
+      /* MOVE */
+      document.addEventListener("mousemove", (e) => moveThumb(e.clientX));
+      document.addEventListener("touchmove", (e) =>
+        moveThumb(e.touches[0].clientX)
+      );
+
+      function moveThumb(clientX) {
+        if (!dragging || confirmed) return;
+
+        const rect = track.getBoundingClientRect();
+        let x = clientX - rect.left - 25;
+        x = Math.max(0, Math.min(x, rect.width - 50));
+        thumb.style.left = x + "px";
+
+        if (x >= rect.width - 50) {
+          confirmed = true;
+          dragging = false;
+          thumb.style.left = rect.width - 50 + "px";
+          thumb.textContent = "✔";
+          celebrate();
+        }
+      }
+
+      /* END DRAG */
+      document.addEventListener("mouseup", snapBack);
+      document.addEventListener("touchend", snapBack);
+
+      function snapBack() {
+        if (!dragging || confirmed) return;
+        dragging = false;
+
+        thumb.style.transition = "left 0.25s ease";
+        thumb.style.left = "0px";
+        thumb.classList.add("bounce");
+        setTimeout(() => thumb.classList.remove("bounce"), 350);
+
+        if (navigator.vibrate) navigator.vibrate(15);
+      }
+
+      /* CELEBRATION */
+      function celebrate() {
+        document.body.classList.add("celebrate");
+        for (let i = 0; i < 30; i++) {
+          const heart = document.createElement("div");
+          heart.className = "heart";
+          heart.textContent = "💖";
+          heart.style.left = Math.random() * 100 + "vw";
+          hearts.appendChild(heart);
+          setTimeout(() => heart.remove(), 4000);
+        }
+        setTimeout(() => go("done"), 1000);
+      }
+    </script>
+  </body>
+</html>
